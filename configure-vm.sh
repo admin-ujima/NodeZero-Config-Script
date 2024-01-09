@@ -55,6 +55,20 @@ handle_config() {
   fi
 }
 
+# TODO! This is not finished yet
+# Function to check and set up H3 runner
+setup_h3_runner() {
+  # Check if H3 runner is already set up
+  if h3-cli runner status | grep -q "Runner is set up"; then
+    echo -e "${GREEN}[INFO] - H3 runner is already set up.${NC}"
+    return
+  fi
+  # H3 runner is not set up, set it up with API key
+  echo -e "${MAGENTA}[INFO] - H3 runner is not set up. Setting it up with API key...${NC}"
+
+  echo -e "${GREEN}[INFO] - H3 runner set up successfully.${NC}"
+}
+
 # Function to process command line options
 process_options() {
   while [[ "$#" -gt 0 ]]; do
