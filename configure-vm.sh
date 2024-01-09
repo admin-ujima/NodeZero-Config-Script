@@ -12,7 +12,6 @@ WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
 # Default values
-SID=""
 HOSTNAME="Nodezero"
 
 # Function to display script usage
@@ -20,51 +19,111 @@ usage() {
   echo -e "${BLUE}Usage: $0 [OPTIONS]"
   echo -e "Options:"
   echo -e "  -s, --sid SID_NAME  Set the SID (e.g., KTH, UJ)"
+  echo -e "  -d, --domain DOMAIN This is the Domain used for xplicittrust (e.g. ujima.de)"
+  echo -e "  -t, --token TOKEN   This is the token to register to the xplicittrust console"
+  echo -e "  -f, --file PATH     This way you can not use the interactive console and instead load a config"
   echo -e "  -h, --help          Display this help message${NC}"
   exit 1
 }
 
+# Function to check if xplicittrust is installed
+check_xplicittrust() {
+  if ! command -v xtna-agent &> /dev/null; then
+    # Install xplicittrust
+    echo -e "${MAGENTA}[INFO] - xplicittrust is missing! Installing it now...${NC}"
+    sudo apt update
+    sudo apt --yes install wireguard wireguard-tools wget iptables ipset
+    wget https://dl.xplicittrust.com/xtna-agent_amd64.deb -P ~/Downloads
+    sudo dpkg -i ~/Downloads/xtna-agent_amd64.deb
+  else
+    echo -e "${GREEN}[INFO] - xplicittrust is already installed.${NC}"
+  fi
+}
+
+# Function to handle configuration from environment variables or configuration file
+handle_config() {
+  if [ -n "$CONFIG_FILE" ]; then
+    echo -e "${RED}[ERROR] - The File Path is empty. This is mandatory for this mode!${NC}"
+    exit 1
+  fi
+  
+  if [ -f "$CONFIG_FILE" ]; then
+    source "$CONFIG_FILE"
+  else
+    echo -e "${RED}[ERROR] - Config file not found: $CONFIG_FILE${NC}"
+    exit 1
+  fi
+}
+
+# Function to process command line options
+process_options() {
+  while [[ "$#" -gt 0 ]]; do
+    case $1 in
+      -s|--sid)
+        SID="$2"
+        shift 2
+        ;;
+      -d|--domain)
+        DOMAIN="$2"
+        shift 2
+        ;;
+      -t|--token)
+        TOKEN="$2"
+        shift 2
+        ;;
+      -h|--help)
+        usage
+        ;;
+      *)
+        echo -e "${RED}[ERROR] - Unknown option: $1${NC}"
+        usage
+        ;;
+    esac
+  done
+}
+
 # Check for sudo privileges
 if [ "$EUID" -ne 0 ]; then
-  echo -e "${RED}[Error] - This script needs sudo privileges. Please run with sudo.${NC}"
+  echo -e "${RED}[ERROR] - This script needs sudo privileges. Please run with sudo.${NC}"
   exit 1
 fi
 
-# Process command line options
-while [[ "$#" -gt 0 ]]; do
-  case $1 in
-    -s|--sid)
-      SID="$2"
-      shift 2
-      ;;
-    -h|--help)
-      usage
-      ;;
-    *)
-      echo -e "${RED}[ERROR] - Unknown option: $1${NC}"
-      usage
-      ;;
-  esac
-done
+# Check if the non-interactive config file based approach want to be used
+if [ "$1" == "-f" ] || [ "$1" == "--file" ]; then
+  CONFIG_FILE="$2"
+  # Handle configuration from file directly
+  handle_config
+  # This shifts the input arguments 2 places to the left
+  shift 2
+else
+  # Enter the loop to process command line options
+  process_options "$@"
+fi
 
 # Check if SID is provided
 if [ -z "$SID" ]; then
-  echo -e "${RED}[Error] - SID is mandatory. Use the -s option to specify the SID.${NC}"
+  echo -e "${RED}[ERROR] - SID is mandatory. Use the -s option to specify the SID.${NC}"
   usage
 fi
 
 # Set the hostname
 MODIFIED_HOSTNAME="${HOSTNAME}-${SID}"
 
-echo -e "${GREEN}[INFO] -  Generated new Hostname: ${MODIFIED_HOSTNAME}${NC}"
+echo -e "${GREEN}[INFO] - Generated new Hostname: ${MODIFIED_HOSTNAME}${NC}"
 
 hostnamectl set-hostname "$MODIFIED_HOSTNAME"
 
 # Update /etc/hosts
 sed -i "s/127.0.1.1.*/127.0.1.1 $MODIFIED_HOSTNAME/g" /etc/hosts
-echo -e "${CYAN}[INFO] -  Updated /etc/hosts for new hostname${NC}"
+echo -e "${CYAN}[INFO] - Updated /etc/hosts for new hostname${NC}"
+
+# Check if xplicittrust is already installed and otherwise install it
+check_xplicittrust
+
+# Run xtna-util with configured values
+sudo xtna-util -domain "$DOMAIN" -token "$TOKEN"
 
 # Reboot to apply changes
-echo -e "${YELLOW}[REBOOT] -  Finished Hostname Modification. Rebooting in 3 Seconds...${NC}"
+echo -e "${YELLOW}[REBOOT] - Finished Hostname Modification. Rebooting in 3 Seconds...${NC}"
 sleep 3
 reboot
