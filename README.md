@@ -19,7 +19,7 @@ sudo ./configure-vm.sh -f ~/config.env
 
 ### Setup DNS Resolving
 Damit die VM auch Hostnames auflösen kann, müssen wir einen DNS Server konfigurieren. Ich habe mich für den Cloudflare DNS Server (1.1.1.1) entschieden:
-```console
+```bash
 sudo system-resolve --set-dns=1.1.1.1 --set-domain=~. --interface=[Netzwerk Interface]
 
 # Beispiel:
