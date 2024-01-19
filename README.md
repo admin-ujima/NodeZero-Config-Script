@@ -45,7 +45,7 @@ Dazu geht man in die Account Einstellungen und dann auf "SSH and GPG Keys". Dort
 
 ### Clonen des Repositorys
 Wir können das Repository nun auf der Nodezero VM clonen, da es nicht möglich einfach zu copy paste gibt es hier wieder ein SSH Workaround.
-1. Brauchen wir den SSH Clone Link: git@github.com:admin-ujima/NodeZero-Config-Script.git
+1. Brauchen wir den SSH Clone Link: "git@github.com:admin-ujima/NodeZero-Config-Script.git"
 2. Nun müssen wir den Command dazu copieren bzw einfach über ssh ausführen:
 ```bash
 ssh nodezero@[IP-Adress] "echo 'git clone git@github.com:admin-ujima/NodeZero-Config-Script.git' > ~/command-git.txt"
