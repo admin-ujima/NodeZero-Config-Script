@@ -14,3 +14,24 @@ Das laden der Datei geht über den Befehl:
 ```bash
 sudo ./configure-vm.sh -f ~/config.env
 ```
+
+## Setup
+
+### Setup DNS Resolving
+
+### Setup needed Dependencies
+
+### Setup RSA Keys and Auth
+Um das Konfigurationsscript nutzen zu können, müssen einige kleine Vorarbeiten getätigt werden.
+Zuerst muss in der VM ein RSA Key Pair angelegt werden. Dieses wird benötigt um einen Zugang zum Git Projekt zu erhalten:
+```bash
+ssh-keygen -b 4096 -N ""  # Das erstellt ein Keypair mit 4096 Bit Schlüssellänge und keinem extra Passwort.
+``` 
+>**WICHTIG:**
+> Damit das kopieren des keys geht, müssen wir einen Workaround konfigurieren, da copy paste mit xclip nur bei einem laufenden X-Server geht (also mit einer GUI)
+
+Wir müssen im selben Netzwerksegment wie die VM sein und dann die IP der VM haben. Nun kopieren wir den public key mit scp:
+```bash
+scp nodezero@[ip]/home/nodezero/.ssh/id_rsa.pub .
+```
+Dieser Public Key muss nun für die Github Account admin_ujima hinterlegt werden, damit die VM sich das Repository herunterladen bzw. updaten kann.
