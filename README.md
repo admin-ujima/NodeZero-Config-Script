@@ -18,7 +18,13 @@ sudo ./configure-vm.sh -f ~/config.env
 ## Setup
 
 ### Setup DNS Resolving
+Damit die VM auch Hostnames auflösen kann, müssen wir einen DNS Server konfigurieren. Ich habe mich für den Cloudflare DNS Server (1.1.1.1) entschieden:
+```bash
+sudo system-resolve --set-dns=1.1.1.1 --set-domain=~. --interface=[Netzwerk Interface]
 
+# Beispiel:
+sudo system-resolve --set-dns=1.1.1.1 --set-domain=~. --interface=eth0
+```
 ### Setup needed Dependencies
 
 ### Setup RSA Keys and Auth
@@ -32,6 +38,19 @@ ssh-keygen -b 4096 -N ""  # Das erstellt ein Keypair mit 4096 Bit Schlüssellän
 
 Wir müssen im selben Netzwerksegment wie die VM sein und dann die IP der VM haben. Nun kopieren wir den public key mit scp:
 ```bash
-scp nodezero@[ip]/home/nodezero/.ssh/id_rsa.pub .
+scp nodezero@[IP-Adress]/home/nodezero/.ssh/id_rsa.pub .
 ```
 Dieser Public Key muss nun für die Github Account admin_ujima hinterlegt werden, damit die VM sich das Repository herunterladen bzw. updaten kann.
+Dazu geht man in die Account Einstellungen und dann auf "SSH and GPG Keys". Dort pasted man die kopierten public key and clickt auf hinzufügen.
+
+### Clonen des Repositorys
+Wir können das Repository nun auf der Nodezero VM clonen, da es nicht möglich einfach zu copy paste gibt es hier wieder ein SSH Workaround.
+1. Brauchen wir den SSH Clone Link: git@github.com:admin-ujima/NodeZero-Config-Script.git
+2. Nun müssen wir den Command dazu copieren bzw einfach über ssh ausführen:
+```bash
+ssh nodezero@[IP-Adress] "echo 'git clone git@github.com:admin-ujima/NodeZero-Config-Script.git' > ~/command-git.txt"
+```
+3. Jetzt müssen wir das Repo mit dem Command clonen:
+```bash
+cat ~/command-git.txt | bash
+```
