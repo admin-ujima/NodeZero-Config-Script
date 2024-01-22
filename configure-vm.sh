@@ -1,16 +1,20 @@
-#!/bin/bash
-
 # Create a directory for logs if it doesn't exist
 mkdir -p .logs
 
 # Log file path
 LOG_FILE=".logs/script_log_$(date +'%Y%m%d%H%M%S').log"
 
-# Redirect stdout to the log file
-exec > >(tee -a "$LOG_FILE")
+# Function to strip color codes
+strip_color_codes() {
+  sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"
+}
 
-# Redirect stderr to the log file without affecting stdout
-exec 2> >(tee -a "$LOG_FILE" >&2)
+# Redirect stdout to the log file with color codes stripped
+exec > >(strip_color_codes | tee -a "$LOG_FILE")
+
+# Redirect stderr to the log file without affecting stdout, also with color codes stripped
+exec 2> >(strip_color_codes | tee -a "$LOG_FILE" >&2)
+
 
 # ANSI escape codes for colors
 BLACK='\033[0;30m'
