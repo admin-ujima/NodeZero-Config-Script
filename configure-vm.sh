@@ -12,7 +12,8 @@ strip_color_codes() {
 }
 
 # Redirect stdout and stderr to the terminal and log file, with color codes stripped
-exec > >(strip_color_codes | tee -a "$LOG_FILE") 2>&1
+#exec > >(strip_color_codes | tee -a "$LOG_FILE")
+2>&1 | tee -a "$LOG_FILE"
 
 
 # ANSI escape codes for colors
