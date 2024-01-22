@@ -2,7 +2,7 @@
 mkdir -p .logs
 
 # Log file path
-LOG_FILE=".logs/script_log_$(date +'%Y%m%d%H%M%S').log"
+LOG_FILE=".logs/script_log_$(date +'%d.%m.%Y-%H:%M:%S').log"
 
 # Function to strip color codes
 strip_color_codes() {
