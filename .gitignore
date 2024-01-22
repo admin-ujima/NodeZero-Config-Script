@@ -1,2 +1,3 @@
 temp-worker/
 config.env
+.logs/
