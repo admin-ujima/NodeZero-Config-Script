@@ -11,10 +11,11 @@ strip_color_codes() {
   sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"
 }
 
-# Redirect stdout and stderr to the terminal and log file, with color codes stripped
-#exec > >(strip_color_codes | tee -a "$LOG_FILE")
-2>&1 | tee -a "$LOG_FILE"
+# Redirect stdout to the terminal and log file, with color codes stripped
+exec > >(strip_color_codes | tee -a "$LOG_FILE")
 
+# Redirect stderr to the terminal and log file, with color codes stripped
+exec 2> >(strip_color_codes | tee -a "$LOG_FILE" >&2)
 
 # ANSI escape codes for colors
 BLACK='\033[0;30m'
