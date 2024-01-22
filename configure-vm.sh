@@ -52,7 +52,7 @@ check_xplicittrust() {
     wget https://dl.xplicittrust.com/xtna-agent_amd64.deb -P ~/Downloads
     sudo dpkg -i ~/Downloads/xtna-agent_amd64.deb
   else
-    echo -e "${GREEN}[INFO] - xplicittrust is already installed.${NC}"
+    echo -e "${GREEN}[DONE] - xplicittrust is already installed.${NC}"
   fi
 }
 
@@ -76,13 +76,13 @@ handle_config() {
 setup_h3_runner() {
   # Check if H3 runner is already set up
   if h3-cli runner status | grep -q "Runner is set up"; then
-    echo -e "${GREEN}[INFO] - H3 runner is already set up.${NC}"
+    echo -e "${GREEN}[DONE] - H3 runner is already set up.${NC}"
     return
   fi
   # H3 runner is not set up, set it up with API key
   echo -e "${MAGENTA}[INFO] - H3 runner is not set up. Setting it up with API key...${NC}"
 
-  echo -e "${GREEN}[INFO] - H3 runner set up successfully.${NC}"
+  echo -e "${GREEN}[DONE] - H3 runner set up successfully.${NC}"
 }
 
 # Function to process command line options
@@ -136,10 +136,22 @@ if [ -z "$SID" ]; then
   usage
 fi
 
+# Check if xplicittrust token is provided
+if [ -z "$TOKEN" ]; then
+  echo -e "${RED}[ERROR] - TOKEN is mandatory. Use the -t option to specify the XplicitTrust Token.${NC}"
+  usage
+fi
+
+# Check if xplicittrust domain is provided
+if [ -z "$DOMAIN" ]; then
+  echo -e "${RED}[ERROR] - DOMAIN is mandatory. Use the -d option to specify the XplicitTrust Domain to register to.${NC}"
+  usage
+fi
+
 # Set the hostname
 MODIFIED_HOSTNAME="${HOSTNAME}-${SID}"
 
-echo -e "${GREEN}[INFO] - Generated new Hostname: ${MODIFIED_HOSTNAME}${NC}"
+echo -e "${GREEN}[DONE] - Generated new Hostname: ${MODIFIED_HOSTNAME}${NC}"
 
 hostnamectl set-hostname "$MODIFIED_HOSTNAME"
 
