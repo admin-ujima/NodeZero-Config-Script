@@ -129,6 +129,7 @@ setup_h3_runner() {
   # Check if Nodezero API Key exists else handle steps
   setup_h3_authentication
 
+  echo -e "${YELLOW}[INFO] - Starting runner checkup...${NC}"
 
   # Check if H3 runner is already set up
   runner_name=$(h3 runners | jq --raw-output .name 2>/dev/null)
