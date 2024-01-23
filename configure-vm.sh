@@ -164,6 +164,7 @@ process_options() {
 # Check if the non-interactive config file based approach want to be used
 if [ "$1" == "-f" ] || [ "$1" == "--file" ]; then
   CONFIG_FILE="$2"
+  echo -e "CONFIG File: $CONFIG_FILE"
   # Handle configuration from file directly
   handle_config
   # This shifts the input arguments 2 places to the left
