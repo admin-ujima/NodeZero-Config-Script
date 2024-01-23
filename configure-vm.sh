@@ -13,7 +13,7 @@ strip_color_codes() {
 
 # Redirect stdout and stderr to the terminal and log file, with color codes stripped
 #exec > >(strip_color_codes | tee -a "$LOG_FILE")
-exec &> >(strip_color_codes | tee -a "$LOG_FILE") 2>&1
+exec > >(tee >(strip_color_codes >> "$LOG_FILE")) 2>&1
 set -o pipefail
 
 # ANSI escape codes for colors
@@ -59,14 +59,14 @@ check_xplicittrust() {
 # Function to handle configuration from environment variables or configuration file
 handle_config() {
   if [ -n "$CONFIG_FILE" ]; then
-    echo -e "${RED}[ERROR] - The File Path is empty. This is mandatory for this mode!${NC}"
+    echo -e "\n${RED}[ERROR] - The File Path is empty. This is mandatory for this mode!${NC}"
     exit 1
   fi
   
   if [ -f "$CONFIG_FILE" ]; then
     source "$CONFIG_FILE"
   else
-    echo -e "${RED}[ERROR] - Config file not found: $CONFIG_FILE${NC}"
+    echo -e "\n${RED}[ERROR] - Config file not found: $CONFIG_FILE${NC}"
     exit 1
   fi
 }
