@@ -192,7 +192,7 @@ sed -i "s/127.0.1.1.*/127.0.1.1 $MODIFIED_HOSTNAME/g" /etc/hosts
 echo -e "${CYAN}[INFO] - Updated /etc/hosts for new hostname${NC}"
 
 # Setup h3 system
-setup_h3_runner
+sudo -u nodezero setup_h3_runner
 
 # Check if xplicittrust is already installed and otherwise install it
 check_xplicittrust
