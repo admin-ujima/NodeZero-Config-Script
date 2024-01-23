@@ -138,11 +138,11 @@ setup_h3_runner() {
     echo -e "${GREEN}[DONE] - H3 runner is already set up.${NC}"
     return
   fi
-  
+
   # H3 runner is not set up, set it up with API key
   echo -e "${MAGENTA}[INFO] - H3 runner is not set up. Setting it up with API key...${NC}"
 
-  h3 start-runner pentest-runner /tmp/pentest-runner.log
+  h3 start-runner-service pentest-runner /tmp/pentest-runner.log
 
   echo -e "${GREEN}[DONE] - H3 runner set up successfully.${NC}"
 }
