@@ -71,18 +71,49 @@ handle_config() {
   fi
 }
 
+setup_h3_path() {
+  # Check if the env variable H3_CLI_HOME exists
+  if [ ! -n "$H3_CLI_HOME" ]; then
+    export H3_CLI_HOME=/home/nodezero/h3-cli
+    echo -e "${MAGENTA}[INFO] - H3_CLI_HOME was not set. It has been added!${NC}"
+  fi
+
+  # Check if the PATH does NOT contain /home/nodezero/h3-cli/bin
+  if [[ ":$PATH:" != *":$H3_CLI_HOME/bin:"* ]]; then
+    # Add /home/nodezero/h3-cli/bin to PATH
+    export PATH="$H3_CLI_HOME/bin:$PATH"
+    echo -e "${MAGENTA}[INFO] - Added $H3_CLI_HOME/bin to PATH.${NC}"
+  fi
+}
+
+setup_h3_authentication(){
+  auth_email=$(h3 whoami | jq --raw-output .email 2>/dev/null)
+
+  if [ ! $? -eq 0 || "$email" != "it-admin@ujima.de"]; then
+    echo "Yeah its setup"
+  else
+    echo "Not setup"
+  fi
+}
+
 # TODO! This is not finished yet
 # Function to check and set up H3 runner
 setup_h3_runner() {
-  # Check if H3 runner is already set up
-  if h3-cli runner status | grep -q "Runner is set up"; then
-    echo -e "${GREEN}[DONE] - H3 runner is already set up.${NC}"
-    return
-  fi
-  # H3 runner is not set up, set it up with API key
-  echo -e "${MAGENTA}[INFO] - H3 runner is not set up. Setting it up with API key...${NC}"
+  setup_h3_path
+  # Check if Nodezero API Key exists
+  setup_h3_authentication
+  # If API Key exists, but a new one is passed, then replace
 
-  echo -e "${GREEN}[DONE] - H3 runner set up successfully.${NC}"
+
+  # Check if H3 runner is already set up
+  # if h3-cli runner status | grep -q "Runner is set up"; then
+  #   echo -e "${GREEN}[DONE] - H3 runner is already set up.${NC}"
+  #   return
+  # fi
+  # # H3 runner is not set up, set it up with API key
+  # echo -e "${MAGENTA}[INFO] - H3 runner is not set up. Setting it up with API key...${NC}"
+
+  # echo -e "${GREEN}[DONE] - H3 runner set up successfully.${NC}"
 }
 
 # Function to process command line options
@@ -158,6 +189,9 @@ hostnamectl set-hostname "$MODIFIED_HOSTNAME"
 # Update /etc/hosts
 sed -i "s/127.0.1.1.*/127.0.1.1 $MODIFIED_HOSTNAME/g" /etc/hosts
 echo -e "${CYAN}[INFO] - Updated /etc/hosts for new hostname${NC}"
+
+# Setup h3 system
+setup_h3_runner
 
 # Check if xplicittrust is already installed and otherwise install it
 check_xplicittrust

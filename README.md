@@ -9,11 +9,16 @@ Für den config-based Modus legt man eine Config Datei mit den geforderten Varia
 SID="UJ"
 DOMAIN="ujima.de"
 TOKEN="<xpliccittrust token here>"
+NODEZERO_APIKEY="<API-Key from the Console>"
 ```
 Das laden der Datei geht über den Befehl:
 ```bash
 sudo ./configure-vm.sh -f ~/config.env
 ```
+
+> **WICHTIG:**
+> Für diesen Modus muss die Datei mit SCP herüber kopiert werden:
+> `scp [path/to/config] nodezero@192.168.178.70:/home/nodezero/NodeZero-Config-Script/config.env`
 
 ## Setup
 
