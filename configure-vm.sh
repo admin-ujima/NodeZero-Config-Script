@@ -145,10 +145,10 @@ process_options() {
 }
 
 # Check for sudo privileges
-if [ "$EUID" -ne 0 ]; then
-  echo -e "${RED}[ERROR] - This script needs sudo privileges. Please run with sudo.${NC}"
-  exit 1
-fi
+# if [ "$EUID" -ne 0 ]; then
+#   echo -e "${RED}[ERROR] - This script needs sudo privileges. Please run with sudo.${NC}"
+#   exit 1
+# fi
 
 # Check if the non-interactive config file based approach want to be used
 if [ "$1" == "-f" ] || [ "$1" == "--file" ]; then
@@ -192,7 +192,7 @@ sed -i "s/127.0.1.1.*/127.0.1.1 $MODIFIED_HOSTNAME/g" /etc/hosts
 echo -e "${CYAN}[INFO] - Updated /etc/hosts for new hostname${NC}"
 
 # Setup h3 system
-sudo -u nodezero setup_h3_runner
+setup_h3_runner
 
 # Check if xplicittrust is already installed and otherwise install it
 check_xplicittrust
