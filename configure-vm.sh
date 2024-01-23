@@ -135,6 +135,8 @@ setup_h3_runner() {
   runner_name=$(h3 runners | jq --raw-output .name 2>/dev/null)
   code=$?
 
+  echo -e "${YELLOW}[DEBUG] - Runner Name: $runner_name, Code: $code${NC}"
+
   if [ $code -eq 0 ] || [ "$runner_name" = "pentest-runner" ]; then
     echo -e "${GREEN}[DONE] - H3 runner is already set up.${NC}"
     return
