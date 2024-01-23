@@ -92,8 +92,9 @@ setup_h3_path() {
 
 setup_h3_authentication() {
   auth_email=$(h3 whoami | jq --raw-output .email 2>/dev/null)
+  code=$?
 
-  if [ $? -ne 0 ] || [ "$auth_email" != "it-admin@ujima.de" ]; then
+  if [ $code -ne 0 ] || [ "$auth_email" != "it-admin@ujima.de" ]; then
     echo -e "${MAGENTA}[INFO] - H3 API Key was not setup! It will be added now...${NC}"
 
     if [ -z "$NODEZERO_APIKEY" ]; then
@@ -103,7 +104,7 @@ setup_h3_authentication() {
 
     cd /home/nodezero/h3-cli
     bash install.sh $NODEZERO_APIKEY
-  elif [ $? -eq 0 ] && [ -n "$NODEZERO_APIKEY" ]; then
+  elif [ $code -eq 0 ] && [ -n "$NODEZERO_APIKEY" ]; then
       echo -e "${MAGENTA}[INFO] - H3 API Key was already setup, but a Key got passed! The API Key will be updated now...${NC}"
 
       # Removing default profile
