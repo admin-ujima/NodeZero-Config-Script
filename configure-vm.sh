@@ -1,23 +1,20 @@
 #!/bin/bash
 
 # Create a directory for logs if it doesn't exist
-mkdir -p .logs
+# mkdir -p .logs
 
-# Log file path
-LOG_FILE=".logs/script_log_$(date +'%d.%m.%Y-%H:%M:%S').log"
+# # Log file path
+# LOG_FILE=".logs/script_log_$(date +'%d.%m.%Y-%H:%M:%S').log"
 
-# Function to strip color codes
-strip_color_codes() {
-  sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"
-}
+# # Function to strip color codes
+# strip_color_codes() {
+#   sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"
+# }
 
-# Create a named pipe to capture stdout while preserving color codes
-PIPE=$(mktemp -u)
-mkfifo "$PIPE"
+# # Redirect stdout and stderr to the terminal and log file, with color codes stripped
+# #exec > >(strip_color_codes | tee -a "$LOG_FILE")
+# exec &> >(tee -a "$LOG_FILE") 2>&1
 
-# Redirect stdout and stderr to both the terminal and log file
-{ tee >(strip_color_codes >> "$LOG_FILE") < "$PIPE" & } 2>&1
-exec 1>"$PIPE"
 
 # ANSI escape codes for colors
 BLACK='\033[0;30m'
@@ -62,14 +59,14 @@ check_xplicittrust() {
 # Function to handle configuration from environment variables or configuration file
 handle_config() {
   if [ -n "$CONFIG_FILE" ]; then
-    echo -e "\n${RED}[ERROR] - The File Path is empty. This is mandatory for this mode!${NC}"
+    echo -e "${RED}[ERROR] - The File Path is empty. This is mandatory for this mode!${NC}"
     exit 1
   fi
   
   if [ -f "$CONFIG_FILE" ]; then
     source "$CONFIG_FILE"
   else
-    echo -e "\n${RED}[ERROR] - Config file not found: $CONFIG_FILE${NC}"
+    echo -e "${RED}[ERROR] - Config file not found: $CONFIG_FILE${NC}"
     exit 1
   fi
 }
