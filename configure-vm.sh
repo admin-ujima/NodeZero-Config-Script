@@ -72,7 +72,8 @@ handle_config() {
 }
 
 setup_h3_path() {
-  # Check if the env variable H3_CLI_HOME exists
+  # Check if the env variable H3_CLI_HOME does not exist or is empty
+  echo -e "ENV H3 Home: $H3_CLI_HOME"
   if [ -z "$H3_CLI_HOME" ]; then
     export H3_CLI_HOME=/home/nodezero/h3-cli
     echo -e "${MAGENTA}[INFO] - H3_CLI_HOME was not set. It has been added!${NC}"
