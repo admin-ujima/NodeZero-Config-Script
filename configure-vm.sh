@@ -102,7 +102,7 @@ setup_h3_authentication() {
     fi
 
     cd /home/nodezero/h3-cli
-    bash install.sh $()
+    bash install.sh $NODEZERO_APIKEY
   else
     echo -e "${GREEN}[DONE] - H3 API Key was already setup!${NC}"
   fi
