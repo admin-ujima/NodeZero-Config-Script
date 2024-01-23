@@ -95,6 +95,14 @@ setup_h3_authentication() {
 
   if [ $? -ne 0 ] || [ "$auth_email" != "it-admin@ujima.de" ]; then
     echo -e "${MAGENTA}[INFO] - H3 API Key was not setup! It will be added now...${NC}"
+
+    if [ -z "$NODEZERO_APIKEY" ]; then
+      echo -e "${RED}[ERROR] - There is no API KEY passed for Nodezero. Exiting setup procedure...${NC}"
+      exit 1
+    fi
+
+    cd /home/nodezero/h3-cli
+    bash install.sh $()
   else
     echo -e "${GREEN}[DONE] - H3 API Key was already setup!${NC}"
   fi
@@ -188,10 +196,10 @@ MODIFIED_HOSTNAME="${HOSTNAME}-${SID}"
 
 echo -e "${GREEN}[DONE] - Generated new Hostname: ${MODIFIED_HOSTNAME}${NC}"
 
-hostnamectl set-hostname "$MODIFIED_HOSTNAME"
+sudo hostnamectl set-hostname "$MODIFIED_HOSTNAME"
 
 # Update /etc/hosts
-sed -i "s/127.0.1.1.*/127.0.1.1 $MODIFIED_HOSTNAME/g" /etc/hosts
+sudo sed -i "s/127.0.1.1.*/127.0.1.1 $MODIFIED_HOSTNAME/g" /etc/hosts
 echo -e "${CYAN}[INFO] - Updated /etc/hosts for new hostname${NC}"
 
 # Setup h3 system
