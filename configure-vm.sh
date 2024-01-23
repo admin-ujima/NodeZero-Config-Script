@@ -74,7 +74,7 @@ handle_config() {
 setup_h3_path() {
   # Check if the env variable H3_CLI_HOME does not exist or is empty
   if [ -z "$H3_CLI_HOME" ]; then
-    export H3_CLI_HOME=/home/nodezero/h3-cli
+    sudo tee -a 'export H3_CLI_HOME=/home/nodezero/h3-cli' /home/nodezero/.profile
     echo -e "${MAGENTA}[INFO] - H3_CLI_HOME was not set. It has been added!${NC}"
   else
     echo -e "${GREEN}[DONE] - H3_CLI_HOME is already setup!${NC}"
@@ -83,7 +83,7 @@ setup_h3_path() {
   # Check if the PATH does NOT contain /home/nodezero/h3-cli/bin
   if [[ ":$PATH:" != *":$H3_CLI_HOME/bin:"* ]]; then
     # Add /home/nodezero/h3-cli/bin to PATH
-    export PATH="$H3_CLI_HOME/bin:$PATH"
+    sudo tee -a 'export PATH="$H3_CLI_HOME/bin:$PATH"' /home/nodezero/.profile
     echo -e "${MAGENTA}[INFO] - Added $H3_CLI_HOME/bin to PATH.${NC}"
   else
     echo -e "${GREEN}[DONE] - $H3_CLI_HOME/bin is already in PATH!${NC}"
@@ -164,7 +164,6 @@ process_options() {
 # Check if the non-interactive config file based approach want to be used
 if [ "$1" == "-f" ] || [ "$1" == "--file" ]; then
   CONFIG_FILE="$2"
-  echo -e "CONFIG File: $CONFIG_FILE"
   # Handle configuration from file directly
   handle_config
   # This shifts the input arguments 2 places to the left
