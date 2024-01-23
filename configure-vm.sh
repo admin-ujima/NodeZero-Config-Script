@@ -13,8 +13,7 @@ strip_color_codes() {
 
 # Redirect stdout and stderr to the terminal and log file, with color codes stripped
 #exec > >(strip_color_codes | tee -a "$LOG_FILE")
-exec > >(tee >(strip_color_codes >> "$LOG_FILE")) 2>&1
-set -o pipefail
+exec > >(strip_color_codes >> "$LOG_FILE") 2>&1
 
 # ANSI escape codes for colors
 BLACK='\033[0;30m'
