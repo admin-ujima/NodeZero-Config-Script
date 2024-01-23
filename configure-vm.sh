@@ -73,7 +73,7 @@ handle_config() {
 
 setup_h3_path() {
   # Check if the env variable H3_CLI_HOME exists
-  if [ ! -n "$H3_CLI_HOME" ]; then
+  if [ -z "$H3_CLI_HOME" ]; then
     export H3_CLI_HOME=/home/nodezero/h3-cli
     echo -e "${MAGENTA}[INFO] - H3_CLI_HOME was not set. It has been added!${NC}"
   fi
@@ -86,13 +86,13 @@ setup_h3_path() {
   fi
 }
 
-setup_h3_authentication(){
+setup_h3_authentication() {
   auth_email=$(h3 whoami | jq --raw-output .email 2>/dev/null)
 
-  if [ ! $? -eq 0 || "$email" != "it-admin@ujima.de"]; then
-    echo "Yeah its setup"
-  else
+  if [ $? -ne 0 ] || [ "$auth_email" != "it-admin@ujima.de" ]; then
     echo "Not setup"
+  else
+    echo "Yeah, it's setup"
   fi
 }
 
