@@ -137,7 +137,7 @@ setup_h3_runner() {
 
   echo -e "${YELLOW}[DEBUG] - Runner Name: $runner_name, Code: $code${NC}"
 
-  if [ $code -eq 0 ] || [ "$runner_name" = "pentest-runner" ]; then
+  if [ $code -eq 0 ] && [ "$runner_name" = "pentest-runner" ]; then
     echo -e "${GREEN}[DONE] - H3 runner is already set up.${NC}"
     return
   fi
