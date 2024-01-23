@@ -73,10 +73,11 @@ handle_config() {
 
 setup_h3_path() {
   # Check if the env variable H3_CLI_HOME does not exist or is empty
-  echo -e "ENV H3 Home: $H3_CLI_HOME"
   if [ -z "$H3_CLI_HOME" ]; then
     export H3_CLI_HOME=/home/nodezero/h3-cli
     echo -e "${MAGENTA}[INFO] - H3_CLI_HOME was not set. It has been added!${NC}"
+  else
+    echo -e "${GREEN}[DONE] - H3_CLI_HOME is already setup!${NC}"
   fi
 
   # Check if the PATH does NOT contain /home/nodezero/h3-cli/bin
@@ -84,6 +85,8 @@ setup_h3_path() {
     # Add /home/nodezero/h3-cli/bin to PATH
     export PATH="$H3_CLI_HOME/bin:$PATH"
     echo -e "${MAGENTA}[INFO] - Added $H3_CLI_HOME/bin to PATH.${NC}"
+  else
+    echo -e "${GREEN}[DONE] - $H3_CLI_HOME/bin is already in PATH!${NC}"
   fi
 }
 
@@ -91,9 +94,9 @@ setup_h3_authentication() {
   auth_email=$(h3 whoami | jq --raw-output .email 2>/dev/null)
 
   if [ $? -ne 0 ] || [ "$auth_email" != "it-admin@ujima.de" ]; then
-    echo "Not setup"
+    echo -e "${MAGENTA}[INFO] - H3 API Key was not setup! It will be added now...${NC}"
   else
-    echo "Yeah, it's setup"
+    echo -e "${GREEN}[DONE] - H3 API Key was already setup!${NC}"
   fi
 }
 
