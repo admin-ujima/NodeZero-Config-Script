@@ -58,7 +58,7 @@ check_xplicittrust() {
 
 # Function to handle configuration from environment variables or configuration file
 handle_config() {
-  if [ -n "$CONFIG_FILE" ]; then
+  if [ -z "$CONFIG_FILE" ]; then
     echo -e "${RED}[ERROR] - The File Path is empty. This is mandatory for this mode!${NC}"
     exit 1
   fi
