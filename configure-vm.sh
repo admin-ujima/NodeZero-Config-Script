@@ -114,7 +114,7 @@ setup_h3_authentication() {
       cd /home/nodezero/h3-cli
       bash install.sh $NODEZERO_APIKEY
 
-      echo -e "${GREEN}[DONE] - H3 API Key has been setup!${NC}"
+      echo -e "${GREEN}[DONE] - H3 API Key has been updated!${NC}"
   else
     echo -e "${GREEN}[DONE] - H3 API Key was already setup!${NC}"
   fi
@@ -123,21 +123,28 @@ setup_h3_authentication() {
 # TODO! This is not finished yet
 # Function to check and set up H3 runner
 setup_h3_runner() {
+  # Setup required env variables
   setup_h3_path
-  # Check if Nodezero API Key exists
+
+  # Check if Nodezero API Key exists else handle steps
   setup_h3_authentication
-  # If API Key exists, but a new one is passed, then replace
 
 
   # Check if H3 runner is already set up
-  # if h3-cli runner status | grep -q "Runner is set up"; then
-  #   echo -e "${GREEN}[DONE] - H3 runner is already set up.${NC}"
-  #   return
-  # fi
-  # # H3 runner is not set up, set it up with API key
-  # echo -e "${MAGENTA}[INFO] - H3 runner is not set up. Setting it up with API key...${NC}"
+  runner_name=$(h3 runners | jq --raw-output .name 2>/dev/null)
+  code=$?
 
-  # echo -e "${GREEN}[DONE] - H3 runner set up successfully.${NC}"
+  if [ $code -eq 0 ] || [ "$runner_name" = "pentest-runner" ]; then
+    echo -e "${GREEN}[DONE] - H3 runner is already set up.${NC}"
+    return
+  fi
+  
+  # H3 runner is not set up, set it up with API key
+  echo -e "${MAGENTA}[INFO] - H3 runner is not set up. Setting it up with API key...${NC}"
+
+  h3 start-runner pentest-runner /tmp/pentest-runner.log
+
+  echo -e "${GREEN}[DONE] - H3 runner set up successfully.${NC}"
 }
 
 # Function to process command line options
