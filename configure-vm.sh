@@ -239,7 +239,7 @@ sudo xtna-util -domain "$DOMAIN" -token "$TOKEN"
 # Save the exit code in a variable
 xtna_exit_code=$?
 
-if [ $xtna_exit_code -eq 0];then
+if [ $xtna_exit_code -eq 0 ];then
   echo -e "${CYAN}[INFO] - The xplicittrust connection has been established!${NC}"
 else
   echo -e "${RED}[ERROR] - Something went wrong, when trying to establish connection to XplicitTrust...Probably the Token expired!${NC}"
