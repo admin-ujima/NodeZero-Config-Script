@@ -120,8 +120,10 @@ setup_h3_authentication() {
   fi
 }
 
-# TODO! This is not finished yet
-# Function to check and set up H3 runner
+# TODO This is not finished yet
+# ! Bei runners soll geschaut werden, dass der systemd process nur gestartet wird, wenn es nicht schon einen gibt
+# ! Bitte erledigen
+
 setup_h3_runner() {
   # Setup required env variables
   setup_h3_path
@@ -145,6 +147,7 @@ setup_h3_runner() {
   # H3 runner is not set up, set it up with API key
   echo -e "${MAGENTA}[INFO] - H3 runner is not set up. Setting it up with API key...${NC}"
 
+  rm -f /tmp/pentest-runner.log
   h3 start-runner-service pentest-runner /tmp/pentest-runner.log
 
   echo -e "${GREEN}[DONE] - H3 runner set up successfully.${NC}"
@@ -232,6 +235,16 @@ check_xplicittrust
 
 # Run xtna-util with configured values
 sudo xtna-util -domain "$DOMAIN" -token "$TOKEN"
+
+# Save the exit code in a variable
+xtna_exit_code=$?
+
+if [ $xtna_exit_code -eq 0];then
+  echo -e "${CYAN}[INFO] - The xplicittrust connection has been established!${NC}"
+else
+  echo -e "${RED}[ERROR] - Something went wrong, when trying to establish connection to XplicitTrust...Probably the Token expired!${NC}"
+  exit 1
+fi
 
 # Reboot to apply changes
 echo -e "${YELLOW}[REBOOT] - Finished Hostname Modification. Rebooting in 3 Seconds...${NC}"

@@ -13,7 +13,7 @@ NODEZERO_APIKEY="<API-Key from the Console>"
 ```
 Das laden der Datei geht über den Befehl:
 ```bash
-sudo ./configure-vm.sh -f ~/config.env
+./configure-vm.sh -f ~/config.env
 ```
 
 > **WICHTIG:**
