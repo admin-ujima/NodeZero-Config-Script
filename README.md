@@ -22,6 +22,12 @@ Das laden der Datei geht über den Befehl:
 
 ## Setup
 
+### Fix Keyboard Layout
+Das Default Keyboard layout ist Amerikanisch und deswegen ändern wir das zu Deutsch. Dazu muss die `keyboard` Datei  modifiziert werden:
+1. `sudo nano /etc/default/keyboard`
+2. Ändern der Zeile `XKBLAYOUT="us"` zu `XKBLAYOUT="de"`
+3. Neustarten der VM
+
 ### Setup DNS Resolving
 Damit die VM auch Hostnames auflösen kann, müssen wir einen DNS Server konfigurieren. Ich habe mich für den Cloudflare DNS Server (1.1.1.1) entschieden:
 ```bash
