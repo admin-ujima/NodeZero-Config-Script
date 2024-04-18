@@ -31,10 +31,10 @@ Das Default Keyboard layout ist Amerikanisch und deswegen ändern wir das zu Deu
 ### Setup DNS Resolving
 Damit die VM auch Hostnames auflösen kann, müssen wir einen DNS Server konfigurieren. Ich habe mich für den Cloudflare DNS Server (1.1.1.1) entschieden:
 ```bash
-sudo system-resolve --set-dns=1.1.1.1 --set-domain=~. --interface=[Netzwerk Interface]
+sudo systemd-resolve --set-dns=1.1.1.1 --set-domain=~. --interface=[Netzwerk Interface]
 
 # Beispiel:
-sudo system-resolve --set-dns=1.1.1.1 --set-domain=~. --interface=eth0
+sudo systemd-resolve --set-dns=1.1.1.1 --set-domain=~. --interface=eth0
 ```
 ### Setup needed Dependencies
 
