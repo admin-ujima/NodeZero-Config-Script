@@ -93,7 +93,7 @@ setup_h3_path() {
 }
 
 setup_h3_authentication() {
-  auth_email=$(h3 whoami | jq --raw-output .email 2>/dev/null)
+  auth_email=$(sudo -u nodezero "h3 whoami" | jq --raw-output .email 2>/dev/null)
   code=$?
 
   if [ $code -ne 0 ] || [ "$auth_email" != "it-admin@ujima.de" ]; then
@@ -131,7 +131,7 @@ setup_h3_runner() {
   setup_h3_path
 
   # Check if Nodezero API Key exists else handle steps
-  sudo -u nodezero setup_h3_authentication
+  setup_h3_authentication
 
   echo -e "${YELLOW}[INFO] - Starting runner checkup...${NC}"
 
