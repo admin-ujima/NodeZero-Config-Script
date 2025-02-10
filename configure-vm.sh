@@ -49,8 +49,9 @@ check_xplicittrust() {
     echo -e "${MAGENTA}[INFO] - xplicittrust is missing! Installing it now...${NC}"
     sudo apt update
     sudo apt --yes install wireguard wireguard-tools wget iptables ipset
-    wget https://dl.xplicittrust.com/xtna-agent_amd64.deb -P ~/Downloads
+    wget https://dl.xplicittrust.com/xtna-agent_amd64.deb
     sudo dpkg -i ~/Downloads/xtna-agent_amd64.deb
+    rm -rf xtna-agent_amd64.deb
   else
     echo -e "${GREEN}[DONE] - xplicittrust is already installed.${NC}"
   fi
