@@ -93,7 +93,7 @@ setup_h3_path() {
 }
 
 setup_h3_authentication() {
-  auth_email=$(sudo -u nodezero "h3 whoami" | jq --raw-output .email 2>/dev/null)
+  auth_email=$(sudo -iu nodezero bash -c "h3 whoami" | jq --raw-output .email 2>/dev/null)
   code=$?
 
   if [ $code -ne 0 ] || [ "$auth_email" != "it-admin@ujima.de" ]; then
@@ -110,7 +110,7 @@ setup_h3_authentication() {
       echo -e "${MAGENTA}[INFO] - H3 API Key was already setup, but a Key got passed! The API Key will be updated now...${NC}"
 
       # Removing default profile
-      h3 delete-profile default
+      sudo -iu nodezero bash -c "h3 delete-profile default"
 
       # Adding new profile with api key
       cd /home/nodezero/h3-cli
@@ -136,7 +136,7 @@ setup_h3_runner() {
   echo -e "${YELLOW}[INFO] - Starting runner checkup...${NC}"
 
   # Check if H3 runner is already set up
-  runner_name=$(h3 runners | jq --raw-output .name 2>/dev/null)
+  runner_name=$(sudo -iu nodezero bash -c "h3 runners" | jq --raw-output .name 2>/dev/null)
   code=$?
 
   echo -e "${YELLOW}[DEBUG] - Runner Name: $runner_name, Code: $code${NC}"
@@ -150,7 +150,7 @@ setup_h3_runner() {
   echo -e "${MAGENTA}[INFO] - H3 runner is not set up. Setting it up with API key...${NC}"
 
   rm -f /tmp/pentest-runner.log
-  h3 start-runner-service pentest-runner /tmp/pentest-runner.log
+  sudo -iu nodezero bash -c "h3 start-runner-service pentest-runner /tmp/pentest-runner.log"
 
   echo -e "${GREEN}[DONE] - H3 runner set up successfully.${NC}"
 }
