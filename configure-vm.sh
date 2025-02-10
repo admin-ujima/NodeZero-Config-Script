@@ -223,6 +223,7 @@ fi
 HOSTNAME=$(echo "$HOSTNAME" | tr -d '\r\n')
 SID=$(echo "$SID" | tr -d '\r\n')
 DOMAIN=$(echo "$DOMAIN" | tr -d '\r\n')
+TOKEN=$(echo "$TOKEN" | tr -d '\r\n')
 
 # Set the hostname
 MODIFIED_HOSTNAME="${HOSTNAME}-${SID}"
