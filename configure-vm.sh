@@ -216,8 +216,9 @@ if [ -z "$DOMAIN" ]; then
   usage
 fi
 
-# Sanitize SID from any trailing linebreaks
-SID=$(echo "$SID" | tr -d '\n')
+# Sanitize SID and HOSTNAME from any trailing linebreaks
+HOSTNAME=$(echo "$HOSTNAME" | tr -d '\r\n')
+SID=$(echo "$SID" | tr -d '\r\n')
 
 # Set the hostname
 MODIFIED_HOSTNAME="${HOSTNAME}-${SID}"
