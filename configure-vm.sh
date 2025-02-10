@@ -83,12 +83,12 @@ setup_h3_path() {
 
   # Check if the PATH does NOT contain /home/nodezero/h3-cli/bin
   nodezero_path=$(sudo -iu nodezero bash -c 'echo "$PATH"')
-  if [[ ":$PATH:" != *":$H3_CLI_HOME/bin:"* ]]; then
+  if [[ ":$nodezero_path:" != *":/home/nodezero/h3-cli/bin:"* ]]; then
     # Add /home/nodezero/h3-cli/bin to PATH
     sudo tee -a 'export PATH="$H3_CLI_HOME/bin:$PATH"' /home/nodezero/.profile
-    echo -e "${MAGENTA}[INFO] - Added $H3_CLI_HOME/bin to PATH.${NC}"
+    echo -e "${MAGENTA}[INFO] - Added /home/nodezero/h3-cli/bin to PATH.${NC}"
   else
-    echo -e "${GREEN}[DONE] - $H3_CLI_HOME/bin is already in PATH!${NC}"
+    echo -e "${GREEN}[DONE] - /home/nodezero/h3-cli/bin is already in PATH!${NC}"
   fi
 }
 
