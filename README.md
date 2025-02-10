@@ -28,6 +28,9 @@ Das Default Keyboard layout ist Amerikanisch und deswegen ändern wir das zu Deu
 2. Ändern der Zeile `XKBLAYOUT="us"` zu `XKBLAYOUT="de"`
 3. Neustarten der VM
 
+### Setup Network Interface
+
+
 ### Setup DNS Resolving
 Damit die VM auch Hostnames auflösen kann, müssen wir einen DNS Server konfigurieren. Ich habe mich für den Cloudflare DNS Server (1.1.1.1) entschieden:
 ```bash
@@ -36,7 +39,6 @@ sudo systemd-resolve --set-dns=1.1.1.1 --set-domain=~. --interface=[Netzwerk Int
 # Beispiel:
 sudo systemd-resolve --set-dns=1.1.1.1 --set-domain=~. --interface=eth0
 ```
-### Setup needed Dependencies
 
 ### Setup RSA Keys and Auth
 Um das Konfigurationsscript nutzen zu können, müssen einige kleine Vorarbeiten getätigt werden.
@@ -49,7 +51,7 @@ ssh-keygen -b 4096 -N ""  # Das erstellt ein Keypair mit 4096 Bit Schlüssellän
 
 Wir müssen im selben Netzwerksegment wie die VM sein und dann die IP der VM haben. Nun kopieren wir den public key mit scp:
 ```bash
-scp nodezero@[IP-Adress]/home/nodezero/.ssh/id_rsa.pub .
+scp nodezero@[IP-Adress]:/home/nodezero/.ssh/id_rsa.pub .
 ```
 Dieser Public Key muss nun für die Github Account admin_ujima hinterlegt werden, damit die VM sich das Repository herunterladen bzw. updaten kann.
 Dazu geht man in die Account Einstellungen und dann auf "SSH and GPG Keys". Dort pasted man die kopierten public key and clickt auf hinzufügen.
