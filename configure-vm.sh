@@ -73,7 +73,8 @@ handle_config() {
 
 setup_h3_path() {
   # Check if the env variable H3_CLI_HOME does not exist or is empty
-  if [ -z "$H3_CLI_HOME" ]; then
+  nodezero_h3_cli_home=$(sudo -u nodezero bash -c 'echo "$H3_CLI_HOME"')
+  if [ -z "$nodezero_h3_cli" ]; then
     sudo tee -a 'export H3_CLI_HOME=/home/nodezero/h3-cli' /home/nodezero/.profile
     echo -e "${MAGENTA}[INFO] - H3_CLI_HOME was not set. It has been added!${NC}"
   else
@@ -81,6 +82,7 @@ setup_h3_path() {
   fi
 
   # Check if the PATH does NOT contain /home/nodezero/h3-cli/bin
+  nodezero_path=$(sudo -iu nodezero bash -c 'echo "$PATH"')
   if [[ ":$PATH:" != *":$H3_CLI_HOME/bin:"* ]]; then
     # Add /home/nodezero/h3-cli/bin to PATH
     sudo tee -a 'export PATH="$H3_CLI_HOME/bin:$PATH"' /home/nodezero/.profile
