@@ -131,7 +131,7 @@ setup_h3_runner() {
   setup_h3_path
 
   # Check if Nodezero API Key exists else handle steps
-  setup_h3_authentication
+  sudo -u nodezero setup_h3_authentication
 
   echo -e "${YELLOW}[INFO] - Starting runner checkup...${NC}"
 
