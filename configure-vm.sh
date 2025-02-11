@@ -11,10 +11,7 @@ strip_color_codes() {
   sed -ru "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"
 }
 
-# Redirect stdout and stderr:
-#  - Use stdbuf to force line buffering for tee.
-#  - tee writes to the terminal (with colors) and sends a copy to strip_color_codes,
-#    which then appends the uncolored output to the log file.
+# Redirect stdout and stderr to Logfile
 exec > >(stdbuf -oL tee >(strip_color_codes >> "$LOG_FILE"))
 exec 2>&1
 
@@ -125,10 +122,6 @@ setup_h3_authentication() {
     echo -e "${GREEN}[DONE] - H3 API Key was already setup!${NC}"
   fi
 }
-
-# TODO This is not finished yet
-# ! Bei runners soll geschaut werden, dass der systemd process nur gestartet wird, wenn es nicht schon einen gibt
-# ! Bitte erledigen
 
 setup_h3_runner() {
   # Setup required env variables
@@ -266,6 +259,6 @@ else
 fi
 
 # Reboot to apply changes
-echo -e "${YELLOW}[REBOOT] - Finished Hostname Modification. Rebooting in 30 Seconds...${NC}"
-sleep 30
+echo -e "${YELLOW}[REBOOT] - Finished Hostname Modification. Rebooting in 10 Seconds...${NC}"
+sleep 10
 reboot
