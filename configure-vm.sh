@@ -263,6 +263,6 @@ else
 fi
 
 # Reboot to apply changes
-echo -e "${YELLOW}[REBOOT] - Finished Hostname Modification. Rebooting in 3 Seconds...${NC}"
-sleep 3
+echo -e "${YELLOW}[REBOOT] - Finished Hostname Modification. Rebooting in 30 Seconds...${NC}"
+sleep 30
 reboot
