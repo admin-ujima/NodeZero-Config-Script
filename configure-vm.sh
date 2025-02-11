@@ -1,17 +1,20 @@
 #!/bin/bash
 
 # Create a directory for logs if it doesn't exist
- mkdir -p .logs
+mkdir -p .logs
 
-# # Log file path
- LOG_FILE=".logs/script_log_$(date +'%d.%m.%Y-%H:%M:%S').log"
+# Log file path
+LOG_FILE=".logs/script_log_$(date +'%d.%m.%Y-%H:%M:%S').log"
 
-# # Function to strip color codes
+# Function to strip ANSI color codes using unbuffered sed
 strip_color_codes() {
-  sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"
+  sed -ru "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"
 }
 
-# # Redirect stdout and stderr to the terminal and log file, with color codes stripped
+# Redirect stdout and stderr:
+#  - Use stdbuf to force line buffering for tee.
+#  - tee writes to the terminal (with colors) and sends a copy to strip_color_codes,
+#    which then appends the uncolored output to the log file.
 exec > >(stdbuf -oL tee >(strip_color_codes >> "$LOG_FILE"))
 exec 2>&1
 
