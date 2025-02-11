@@ -12,8 +12,7 @@ strip_color_codes() {
 }
 
 # # Redirect stdout and stderr to the terminal and log file, with color codes stripped
-exec > >(tee >(strip_color_codes >> "$LOG_FILE"))
-
+exec > >(stdbuf -oL tee >(strip_color_codes >> "$LOG_FILE"))
 exec 2>&1
 
 
