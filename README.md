@@ -20,6 +20,7 @@ Das laden der Datei geht über den Befehl:
 > Für diesen Modus muss die Datei mit SCP herüber kopiert werden:
 > `scp [path/to/config] nodezero@192.168.178.70:/home/nodezero/NodeZero-Config-Script/config.env`
 
+Sollte irgendwas schief gehen gibt es für jede Ausführung des Scripts ein Logfile mit dem Zeitstempel der Ausführung im `.logs` Ordner des lokalen Git-Repository
 ## Setup
 
 ### Fix Keyboard Layout
@@ -27,9 +28,6 @@ Das Default Keyboard layout ist Amerikanisch und deswegen ändern wir das zu Deu
 1. `sudo nano /etc/default/keyboard`
 2. Ändern der Zeile `XKBLAYOUT="us"` zu `XKBLAYOUT="de"`
 3. Neustarten der VM
-
-### Setup Network Interface
-
 
 ### Setup DNS Resolving
 Damit die VM auch Hostnames auflösen kann, müssen wir einen DNS Server konfigurieren. Ich habe mich für den Cloudflare DNS Server (1.1.1.1) entschieden:
