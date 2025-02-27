@@ -108,7 +108,8 @@ setup_h3_authentication() {
       exit 1
     fi
 
-    cd /home/nodezero/h3-cli
+    /usr/bin/cd /home/nodezero/h3-cli
+    /usr/bin/chmod +x install.sh
     sudo -iu nodezero bash install.sh "$NODEZERO_APIKEY"
   elif [ $code -eq 0 ] && [ -n "$NODEZERO_APIKEY" ]; then
       echo -e "${MAGENTA}[INFO] - H3 API Key was already setup, but a Key got passed! The API Key will be updated now...${NC}"
@@ -117,7 +118,8 @@ setup_h3_authentication() {
       sudo -iu nodezero bash -c "h3 delete-profile default"
 
       # Adding new profile with api key
-      cd /home/nodezero/h3-cli
+      /usr/bin/cd /home/nodezero/h3-cli
+      /usr/bin/chmod +x install.sh
       sudo -iu nodezero bash install.sh "$NODEZERO_APIKEY"
 
       echo -e "${GREEN}[DONE] - H3 API Key has been updated!${NC}"
