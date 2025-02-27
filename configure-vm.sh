@@ -220,6 +220,7 @@ fi
 
 # Sanitize SID and HOSTNAME from any trailing linebreaks
 HOSTNAME=$(echo "$HOSTNAME" | tr -d '\r\n')
+INDEX=$(echo "$INDEX" | tr -d '\r\n')
 SID=$(echo "$SID" | tr -d '\r\n' | tr '[:upper:]' '[:lower:]')
 DOMAIN=$(echo "$DOMAIN" | tr -d '\r\n')
 
