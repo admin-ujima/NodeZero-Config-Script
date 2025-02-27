@@ -108,7 +108,7 @@ setup_h3_authentication() {
       exit 1
     fi
 
-    /usr/bin/cd /home/nodezero/h3-cli
+    cd /home/nodezero/h3-cli
     /usr/bin/chmod +x install.sh
     sudo -iu nodezero bash install.sh "$NODEZERO_APIKEY"
   elif [ $code -eq 0 ] && [ -n "$NODEZERO_APIKEY" ]; then
@@ -118,7 +118,7 @@ setup_h3_authentication() {
       sudo -iu nodezero bash -c "h3 delete-profile default"
 
       # Adding new profile with api key
-      /usr/bin/cd /home/nodezero/h3-cli
+      cd /home/nodezero/h3-cli
       /usr/bin/chmod +x install.sh
       sudo -iu nodezero bash install.sh "$NODEZERO_APIKEY"
 
