@@ -144,16 +144,16 @@ setup_h3_runner() {
 
   echo -e "${YELLOW}[DEBUG] - Runner Name: $runner_name, Code: $code${NC}"
 
-  if [ $code -eq 0 ] && [ "$runner_name" = "pentest-runner" ]; then
-    echo -e "${GREEN}[DONE] - H3 runner is already set up.${NC}"
-    return
+  if [ $code -eq 0 ] && [ "$runner_name" = "$MODIFIED_HOSTNAME" ]; then
+    echo -e "${RED}[DONE] - H3 runner with the name $MODIFIED_HOSTNAME is already set up. If you want a additional runner change the INDEX${NC}"
+    exit 1
   fi
 
   # H3 runner is not set up, set it up with API key
   echo -e "${MAGENTA}[INFO] - H3 runner is not set up. Setting it up with API key...${NC}"
 
-  rm -f /tmp/pentest-runner.log
-  sudo -iu nodezero bash -c "h3 start-runner-service pentest-runner /tmp/pentest-runner.log"
+  rm -f /tmp/$MODIFIED_HOSTNAME.log
+  sudo -iu nodezero bash -c "h3 start-runner-service $MODIFIED_HOSTNAME /tmp/$MODIFIED_HOSTNAME.log"
 
   echo -e "${GREEN}[DONE] - H3 runner set up successfully.${NC}"
 }
