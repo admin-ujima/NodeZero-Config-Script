@@ -140,6 +140,9 @@ setup_h3_runner() {
   echo -e "${YELLOW}[INFO] - Starting runner checkup...${NC}"
 
   # Check if H3 runner is already set up
+  chown nodezero:nodezero /tmp/.resolve_fragments_full_query.txt
+  chown nodezero:nodezero /tmp/.resolve_fragments_spreads.txt
+  chown nodezero:nodezero /tmp/.resolve_fragments_defineds.txt
   runner_name=$(/home/nodezero/h3-cli/bin/h3 runners | jq --raw-output .name 2>/dev/null)
   code=$?
 
