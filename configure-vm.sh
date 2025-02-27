@@ -97,6 +97,7 @@ setup_h3_path() {
 }
 
 setup_h3_authentication() {
+  echo -e "${MAGENTA}[INFO] - Checking if there is H3 Authentication...${NC}"
   auth_email=$(sudo -iu nodezero bash -c "h3 whoami" | jq --raw-output .email 2>/dev/null)
   code=$?
 
