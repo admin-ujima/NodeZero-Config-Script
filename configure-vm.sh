@@ -75,74 +75,73 @@ handle_config() {
   fi
 }
 
-setup_h3_path() {
-  # Check if the env variable H3_CLI_HOME does not exist or is empty
-  nodezero_h3_cli_home=$(sudo -iu nodezero bash -c 'echo "$H3_CLI_HOME"')
-  if [ -z "$nodezero_h3_cli_home" ]; then
-    sudo tee -a 'export H3_CLI_HOME=/home/nodezero/h3-cli' /home/nodezero/.profile
-    echo -e "${MAGENTA}[INFO] - H3_CLI_HOME was not set. It has been added!${NC}"
-  else
-    echo -e "${GREEN}[DONE] - H3_CLI_HOME is already setup!${NC}"
-  fi
 
-  # Check if the PATH does NOT contain /home/nodezero/h3-cli/bin
-  nodezero_path=$(sudo -iu nodezero bash -c 'echo "$PATH"')
-  if [[ ":$nodezero_path:" != *":/home/nodezero/h3-cli/bin:"* ]]; then
-    # Add /home/nodezero/h3-cli/bin to PATH
-    sudo tee -a 'export PATH="$H3_CLI_HOME/bin:$PATH"' /home/nodezero/.profile
-    echo -e "${MAGENTA}[INFO] - Added /home/nodezero/h3-cli/bin to PATH.${NC}"
-  else
-    echo -e "${GREEN}[DONE] - /home/nodezero/h3-cli/bin is already in PATH!${NC}"
-  fi
-}
 
-setup_h3_authentication() {
-  echo -e "${MAGENTA}[INFO] - Checking if there is H3 Authentication...${NC}"
-  chown nodezero:nodezero /tmp/.resolve_fragments_full_query.txt
-  auth_email=$(sudo -iu nodezero bash -c "h3 whoami" | jq --raw-output .email 2>/dev/null)
-  code=$?
+# setup_h3_path() {
+#   # Check if the env variable H3_CLI_HOME does not exist or is empty
+#   nodezero_h3_cli_home=$(sudo -iu nodezero bash -c 'echo "$H3_CLI_HOME"')
+#   if [ -z "$nodezero_h3_cli_home" ]; then
+#     sudo tee -a 'export H3_CLI_HOME=/home/nodezero/h3-cli' /home/nodezero/.profile
+#     echo -e "${MAGENTA}[INFO] - H3_CLI_HOME was not set. It has been added!${NC}"
+#   else
+#     echo -e "${GREEN}[DONE] - H3_CLI_HOME is already setup!${NC}"
+#   fi
 
-  if [ $code -ne 0 ] || [ "$auth_email" != "it-admin@ujima.de" ]; then
-    echo -e "${MAGENTA}[INFO] - H3 API Key was not setup! It will be added now...${NC}"
+#   # Check if the PATH does NOT contain /home/nodezero/h3-cli/bin
+#   nodezero_path=$(sudo -iu nodezero bash -c 'echo "$PATH"')
+#   if [[ ":$nodezero_path:" != *":/home/nodezero/h3-cli/bin:"* ]]; then
+#     # Add /home/nodezero/h3-cli/bin to PATH
+#     sudo tee -a 'export PATH="$H3_CLI_HOME/bin:$PATH"' /home/nodezero/.profile
+#     echo -e "${MAGENTA}[INFO] - Added /home/nodezero/h3-cli/bin to PATH.${NC}"
+#   else
+#     echo -e "${GREEN}[DONE] - /home/nodezero/h3-cli/bin is already in PATH!${NC}"
+#   fi
+# }
 
-    if [ -z "$NODEZERO_APIKEY" ]; then
-      echo -e "${RED}[ERROR] - There is no API KEY passed for Nodezero. Exiting setup procedure...${NC}"
-      exit 1
-    fi
+# setup_h3_authentication() {
+#   echo -e "${MAGENTA}[INFO] - Checking if there is H3 Authentication...${NC}"
+#   chown nodezero:nodezero /tmp/.resolve_fragments_full_query.txt
+#   auth_email=$(sudo -iu nodezero bash -c "h3 whoami" | jq --raw-output .email 2>/dev/null)
+#   code=$?
 
-    /usr/bin/chmod +x /home/nodezero/h3-cli/install.sh
-    /usr/bin/chown -R nodezero:nodezero /home/nodezero/h3-cli/
-    sudo -iu nodezero bash -c "cd /home/nodezero/h3-cli;bash install.sh \"$NODEZERO_APIKEY\""
-  elif [ $code -eq 0 ] && [ -n "$NODEZERO_APIKEY" ]; then
-      echo -e "${MAGENTA}[INFO] - H3 API Key was already setup, but a Key got passed! The API Key will be updated now...${NC}"
+#   if [ $code -ne 0 ] || [ "$auth_email" != "it-admin@ujima.de" ]; then
+#     echo -e "${MAGENTA}[INFO] - H3 API Key was not setup! It will be added now...${NC}"
 
-      # Removing default profile
-      sudo -iu nodezero bash -c "h3 delete-profile default"
+#     if [ -z "$NODEZERO_APIKEY" ]; then
+#       echo -e "${RED}[ERROR] - There is no API KEY passed for Nodezero. Exiting setup procedure...${NC}"
+#       exit 1
+#     fi
 
-      # Adding new profile with api key
-      /usr/bin/chmod +x /home/nodezero/h3-cli/install.sh
-      /usr/bin/chown -R nodezero:nodezero /home/nodezero/h3-cli/
-      sudo -iu nodezero bash -c "cd /home/nodezero/h3-cli;bash install.sh \"$NODEZERO_APIKEY\""
+#     /usr/bin/chmod +x /home/nodezero/h3-cli/install.sh
+#     /usr/bin/chown -R nodezero:nodezero /home/nodezero/h3-cli/
+#     sudo -iu nodezero bash -c "cd /home/nodezero/h3-cli;bash install.sh \"$NODEZERO_APIKEY\""
+#   elif [ $code -eq 0 ] && [ -n "$NODEZERO_APIKEY" ]; then
+#       echo -e "${MAGENTA}[INFO] - H3 API Key was already setup, but a Key got passed! The API Key will be updated now...${NC}"
 
-      echo -e "${GREEN}[DONE] - H3 API Key has been updated!${NC}"
-  else
-    echo -e "${GREEN}[DONE] - H3 API Key was already setup!${NC}"
-  fi
-}
+#       # Removing default profile
+#       sudo -iu nodezero bash -c "h3 delete-profile default"
+
+#       # Adding new profile with api key
+#       /usr/bin/chmod +x /home/nodezero/h3-cli/install.sh
+#       /usr/bin/chown -R nodezero:nodezero /home/nodezero/h3-cli/
+#       sudo -iu nodezero bash -c "cd /home/nodezero/h3-cli;bash install.sh \"$NODEZERO_APIKEY\""
+
+#       echo -e "${GREEN}[DONE] - H3 API Key has been updated!${NC}"
+#   else
+#     echo -e "${GREEN}[DONE] - H3 API Key was already setup!${NC}"
+#   fi
+# }
 
 setup_h3_runner() {
   # Setup required env variables
-  setup_h3_path
+  #setup_h3_path
 
   # Check if Nodezero API Key exists else handle steps
-  setup_h3_authentication
+  #setup_h3_authentication
 
   echo -e "${YELLOW}[INFO] - Starting runner checkup...${NC}"
 
   # Check if H3 runner is already set up
-  chown nodezero:nodezero /tmp/.resolve_fragments_full_query.txt
-  chown nodezero:nodezero /tmp/.resolve_fragments_spreads.txt
-  chown nodezero:nodezero /tmp/.resolve_fragments_defineds.txt
   runner_name=$(/home/nodezero/h3-cli/bin/h3 runners | jq --raw-output .name 2>/dev/null)
   code=$?
 
@@ -156,8 +155,7 @@ setup_h3_runner() {
   # H3 runner is not set up, set it up with API key
   echo -e "${MAGENTA}[INFO] - H3 runner is not set up. Setting it up with API key...${NC}"
 
-  rm -f /tmp/$MODIFIED_HOSTNAME.log
-  sudo -iu nodezero bash -c "h3 start-runner-service $MODIFIED_HOSTNAME /tmp/$MODIFIED_HOSTNAME.log"
+  bash /home/nodezero/h3-cli/easy_install.sh "$NODEZERO_APIKEY" "$MODIFIED_HOSTNAME"
 
   echo -e "${GREEN}[DONE] - H3 runner set up successfully.${NC}"
 }
