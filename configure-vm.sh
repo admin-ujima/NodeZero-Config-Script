@@ -139,7 +139,7 @@ setup_h3_runner() {
   echo -e "${YELLOW}[INFO] - Starting runner checkup...${NC}"
 
   # Check if H3 runner is already set up
-  runner_name=$(sudo -iu nodezero bash -c "h3 runners" | jq --raw-output .name 2>/dev/null)
+  runner_name=$(/home/nodezero/h3-cli/h3 runners | jq --raw-output .name 2>/dev/null)
   code=$?
 
   echo -e "${YELLOW}[DEBUG] - Runner Name: $runner_name, Code: $code${NC}"
