@@ -28,7 +28,10 @@ WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
 # Default values
-HOSTNAME="Nodezero"
+HOSTNAME="rtpt"
+
+# Default XPT Token for Red Team Appliances
+TOKEN="M1ID9Z47kRlbCvtgEHbY2kszJ7C0CiYkXqqgjLeNw3k"
 
 # Function to display script usage
 usage() {
@@ -36,7 +39,7 @@ usage() {
   echo -e "Options:"
   echo -e "  -s, --sid SID_NAME  Set the SID (e.g., KTH, UJ)"
   echo -e "  -d, --domain DOMAIN This is the Domain used for xplicittrust (e.g. ujima.de)"
-  echo -e "  -t, --token TOKEN   This is the token to register to the xplicittrust console"
+  echo -e "  -i, --index INDEX   This is the index which is part of the machine hostname"
   echo -e "  -f, --file PATH     This way you can not use the interactive console and instead load a config"
   echo -e "  -h, --help          Display this help message${NC}"
   exit 1
@@ -160,12 +163,12 @@ process_options() {
         SID="$2"
         shift 2
         ;;
-      -d|--domain)
-        DOMAIN="$2"
+      -i|--index)
+        SID="$2"
         shift 2
         ;;
-      -t|--token)
-        TOKEN="$2"
+      -d|--domain)
+        DOMAIN="$2"
         shift 2
         ;;
       -h|--help)
@@ -204,8 +207,8 @@ if [ -z "$SID" ]; then
 fi
 
 # Check if xplicittrust token is provided
-if [ -z "$TOKEN" ]; then
-  echo -e "${RED}[ERROR] - TOKEN is mandatory. Use the -t option to specify the XplicitTrust Token.${NC}"
+if [ -z "$INDEX" ]; then
+  echo -e "${RED}[ERROR] - INDEX is mandatory. Use the -i option to specify the Index of the Machine.${NC}"
   usage
 fi
 
@@ -217,12 +220,11 @@ fi
 
 # Sanitize SID and HOSTNAME from any trailing linebreaks
 HOSTNAME=$(echo "$HOSTNAME" | tr -d '\r\n')
-SID=$(echo "$SID" | tr -d '\r\n')
+SID=$(echo "$SID" | tr -d '\r\n' | tr '[:upper:]' '[:lower:]')
 DOMAIN=$(echo "$DOMAIN" | tr -d '\r\n')
-TOKEN=$(echo "$TOKEN" | tr -d '\r\n')
 
 # Set the hostname
-MODIFIED_HOSTNAME="${HOSTNAME}-${SID}"
+MODIFIED_HOSTNAME="${SID}-${HOSTNAME}-${INDEX}"
 
 echo -e "${GREEN}[DONE] - Generated new Hostname: ${MODIFIED_HOSTNAME}${NC}"
 
