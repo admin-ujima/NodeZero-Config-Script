@@ -109,7 +109,7 @@ setup_h3_authentication() {
     fi
 
     cd /home/nodezero/h3-cli
-    bash install.sh $NODEZERO_APIKEY
+    sudo -iu nodezero bash install.sh "$NODEZERO_APIKEY"
   elif [ $code -eq 0 ] && [ -n "$NODEZERO_APIKEY" ]; then
       echo -e "${MAGENTA}[INFO] - H3 API Key was already setup, but a Key got passed! The API Key will be updated now...${NC}"
 
@@ -118,7 +118,7 @@ setup_h3_authentication() {
 
       # Adding new profile with api key
       cd /home/nodezero/h3-cli
-      bash install.sh $NODEZERO_APIKEY
+      sudo -iu nodezero bash install.sh "$NODEZERO_APIKEY"
 
       echo -e "${GREEN}[DONE] - H3 API Key has been updated!${NC}"
   else
@@ -183,10 +183,10 @@ process_options() {
 }
 
 # Check for sudo privileges
-# if [ "$EUID" -ne 0 ]; then
-#   echo -e "${RED}[ERROR] - This script needs sudo privileges. Please run with sudo.${NC}"
-#   exit 1
-# fi
+if [ "$EUID" -ne 0 ]; then
+  echo -e "${RED}[ERROR] - This script needs sudo privileges. Please run with sudo.${NC}"
+  exit 1
+fi
 
 # Check if the non-interactive config file based approach want to be used
 if [ "$1" == "-f" ] || [ "$1" == "--file" ]; then
