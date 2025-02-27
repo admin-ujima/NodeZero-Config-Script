@@ -98,6 +98,7 @@ setup_h3_path() {
 
 setup_h3_authentication() {
   echo -e "${MAGENTA}[INFO] - Checking if there is H3 Authentication...${NC}"
+  chown nodezero:nodezero /tmp/.resolve_fragments_full_query.txt
   auth_email=$(sudo -iu nodezero bash -c "h3 whoami" | jq --raw-output .email 2>/dev/null)
   code=$?
 
@@ -139,7 +140,7 @@ setup_h3_runner() {
   echo -e "${YELLOW}[INFO] - Starting runner checkup...${NC}"
 
   # Check if H3 runner is already set up
-  runner_name=$(/home/nodezero/h3-cli/h3 runners | jq --raw-output .name 2>/dev/null)
+  runner_name=$(/home/nodezero/h3-cli/bin/h3 runners | jq --raw-output .name 2>/dev/null)
   code=$?
 
   echo -e "${YELLOW}[DEBUG] - Runner Name: $runner_name, Code: $code${NC}"
