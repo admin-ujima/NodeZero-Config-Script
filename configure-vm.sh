@@ -112,6 +112,7 @@ setup_h3_authentication() {
   bash install.sh "$NODEZERO_APIKEY"
 
   echo -e "${GREEN}[DONE] - H3 API Key has been set!${NC}"
+}
 
 setup_h3_runner() {
   # Setup required env variables
