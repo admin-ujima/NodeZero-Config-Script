@@ -98,12 +98,13 @@ setup_h3_path() {
 
 setup_h3_authentication() {
   echo -e "${MAGENTA}[INFO] - Checking if there is H3 Authentication...${NC}"
-  chown nodezero:nodezero /tmp/.resolve_fragments_full_query.txt
   auth_email=$(sudo -iu nodezero bash -c "h3 whoami" | jq --raw-output .email 2>/dev/null)
   code=$?
 
   if [ $code -ne 0 ] || [ "$auth_email" != "it-admin@ujima.de" ]; then
     echo -e "${MAGENTA}[INFO] - H3 API Key was not setup! It will be added now...${NC}"
+
+    rm -rf /tmp/.resolve_fragments*
 
     if [ -z "$NODEZERO_APIKEY" ]; then
       echo -e "${RED}[ERROR] - There is no API KEY passed for Nodezero. Exiting setup procedure...${NC}"
