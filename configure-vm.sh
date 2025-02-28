@@ -98,6 +98,7 @@ setup_h3_path() {
 
 setup_h3_authentication() {
   echo -e "${MAGENTA}[INFO] - Checking if there is H3 Authentication...${NC}"
+  rm -rf /tmp/.resolve_fragments*
   auth_email=$(/home/nodezero/h3-cli/bin/h3 whoami | jq --raw-output .email 2>/dev/null)
   code=$?
 
