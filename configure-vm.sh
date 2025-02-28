@@ -98,33 +98,20 @@ setup_h3_path() {
 
 setup_h3_authentication() {
   echo -e "${MAGENTA}[INFO] - Checking if there is H3 Authentication...${NC}"
-  auth_email=$(h3 whoami | jq --raw-output .email 2>/dev/null)
-  code=$?
 
   cd /home/nodezero/h3-cli
   /usr/bin/chmod +x install.sh
-  if [ $code -ne 0 ] || [ "$auth_email" != "it-admin@ujima.de" ]; then
-    echo -e "${MAGENTA}[INFO] - H3 API Key was not setup! It will be added now...${NC}"
 
-    if [ -z "$NODEZERO_APIKEY" ]; then
-      echo -e "${RED}[ERROR] - There is no API KEY passed for Nodezero. Exiting setup procedure...${NC}"
-      exit 1
-    fi
-
-    bash install.sh "$NODEZERO_APIKEY"
-
-  elif [ $code -eq 0 ] && [ -n "$NODEZERO_APIKEY" ]; then
-      echo -e "${MAGENTA}[INFO] - H3 API Key was already setup, but a Key got passed! The API Key will be updated now...${NC}"
-
-      # Removing default profile
-      h3 delete-profile default
-      bash install.sh "$NODEZERO_APIKEY"
-
-      echo -e "${GREEN}[DONE] - H3 API Key has been updated!${NC}"
-  else
-    echo -e "${GREEN}[DONE] - H3 API Key was already setup!${NC}"
+  if [ -z "$NODEZERO_APIKEY" ]; then
+    echo -e "${RED}[ERROR] - There is no API KEY passed for Nodezero. Exiting setup procedure...${NC}"
+    exit 1
   fi
-}
+
+  # Removing default profile for update or new install
+  h3 delete-profile default
+  bash install.sh "$NODEZERO_APIKEY"
+
+  echo -e "${GREEN}[DONE] - H3 API Key has been set!${NC}"
 
 setup_h3_runner() {
   # Setup required env variables
@@ -267,4 +254,4 @@ fi
 # Reboot to apply changes
 echo -e "${YELLOW}[REBOOT] - Finished Hostname Modification. Rebooting in 10 Seconds...${NC}"
 sleep 10
-reboot
+sudo reboot
