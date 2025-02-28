@@ -124,12 +124,13 @@ setup_h3_runner() {
   echo -e "${YELLOW}[INFO] - Starting runner checkup...${NC}"
 
   # Check if H3 runner is already set up
-  runner_names=$(h3 runners | jq --raw-output .name 2>/dev/null | tr '\n' ' ')
+  runner_names=$(h3 runners | jq --raw-output .name 2>/dev/null)
   code=$?
 
-  echo -e "${YELLOW}[DEBUG] - Runner Names: $runner_name, Code: $code${NC}"
+  print_names=$( echo $runner_name | tr '\n' ' ')
+  echo -e "${YELLOW}[DEBUG] - Runner Names: $print_names, Code: $code${NC}"
 
- if echo "$runner_names" | grep -q "${MODIFIED_HOSTNAME}$"; then
+ if echo "$runner_names" | grep -q "$MODIFIED_HOSTNAME"; then
     echo -e "${RED}[DONE] - H3 runner with the name $MODIFIED_HOSTNAME is already set up. If you want a additional runner change the INDEX${NC}"
     exit 1
   fi
