@@ -65,3 +65,8 @@ ssh nodezero@[IP-Adress] "echo 'git clone git@github.com:admin-ujima/NodeZero-Co
 ```bash
 cat ~/command-git.txt | bash
 ```
+
+
+```
+chown -R nodezero:nodezero /home/nodezero/h3-cli/
+```

@@ -98,33 +98,27 @@ setup_h3_path() {
 
 setup_h3_authentication() {
   echo -e "${MAGENTA}[INFO] - Checking if there is H3 Authentication...${NC}"
-  rm -rf /tmp/.resolve_fragments*
-  auth_email=$(/home/nodezero/h3-cli/bin/h3 whoami | jq --raw-output .email 2>/dev/null)
+  auth_email=$(h3 whoami | jq --raw-output .email 2>/dev/null)
   code=$?
 
+  cd /home/nodezero/h3-cli
+  /usr/bin/chmod +x install.sh
   if [ $code -ne 0 ] || [ "$auth_email" != "it-admin@ujima.de" ]; then
     echo -e "${MAGENTA}[INFO] - H3 API Key was not setup! It will be added now...${NC}"
-
-    rm -rf /tmp/.resolve_fragments*
 
     if [ -z "$NODEZERO_APIKEY" ]; then
       echo -e "${RED}[ERROR] - There is no API KEY passed for Nodezero. Exiting setup procedure...${NC}"
       exit 1
     fi
 
-    /usr/bin/chmod +x /home/nodezero/h3-cli/install.sh
-    /usr/bin/chown -R nodezero:nodezero /home/nodezero/h3-cli/
-    sudo -iu nodezero bash -c "cd /home/nodezero/h3-cli;bash install.sh \"$NODEZERO_APIKEY\""
+    bash install.sh "$NODEZERO_APIKEY"
+
   elif [ $code -eq 0 ] && [ -n "$NODEZERO_APIKEY" ]; then
       echo -e "${MAGENTA}[INFO] - H3 API Key was already setup, but a Key got passed! The API Key will be updated now...${NC}"
 
       # Removing default profile
-      sudo -iu nodezero bash -c "h3 delete-profile default"
-
-      # Adding new profile with api key
-      /usr/bin/chmod +x /home/nodezero/h3-cli/install.sh
-      /usr/bin/chown -R nodezero:nodezero /home/nodezero/h3-cli/
-      sudo -iu nodezero bash -c "cd /home/nodezero/h3-cli;bash install.sh \"$NODEZERO_APIKEY\""
+      h3 delete-profile default
+      bash install.sh "$NODEZERO_APIKEY"
 
       echo -e "${GREEN}[DONE] - H3 API Key has been updated!${NC}"
   else
@@ -145,7 +139,7 @@ setup_h3_runner() {
   #chown nodezero:nodezero /tmp/.resolve_fragments_full_query.txt
   #chown nodezero:nodezero /tmp/.resolve_fragments_spreads.txt
   #chown nodezero:nodezero /tmp/.resolve_fragments_defineds.txt
-  runner_name=$(/home/nodezero/h3-cli/bin/h3 runners | jq --raw-output .name 2>/dev/null)
+  runner_name=$(h3 runners | jq --raw-output .name 2>/dev/null)
   code=$?
 
   echo -e "${YELLOW}[DEBUG] - Runner Name: $runner_name, Code: $code${NC}"
@@ -159,7 +153,7 @@ setup_h3_runner() {
   echo -e "${MAGENTA}[INFO] - H3 runner is not set up. Setting it up with API key...${NC}"
 
   rm -f /tmp/$MODIFIED_HOSTNAME.log
-  sudo -iu nodezero bash -c "h3 start-runner-service $MODIFIED_HOSTNAME /tmp/$MODIFIED_HOSTNAME.log"
+  h3 start-runner-service $MODIFIED_HOSTNAME /tmp/$MODIFIED_HOSTNAME.log
 
   echo -e "${GREEN}[DONE] - H3 runner set up successfully.${NC}"
 }
@@ -192,10 +186,10 @@ process_options() {
 }
 
 # Check for sudo privileges
-if [ "$EUID" -ne 0 ]; then
-  echo -e "${RED}[ERROR] - This script needs sudo privileges. Please run with sudo.${NC}"
-  exit 1
-fi
+# if [ "$EUID" -ne 0 ]; then
+#   echo -e "${RED}[ERROR] - This script needs sudo privileges. Please run with sudo.${NC}"
+#   exit 1
+# fi
 
 # Check if the non-interactive config file based approach want to be used
 if [ "$1" == "-f" ] || [ "$1" == "--file" ]; then
