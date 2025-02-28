@@ -215,6 +215,13 @@ INDEX=$(echo "$INDEX" | tr -d '\r\n')
 SID=$(echo "$SID" | tr -d '\r\n' | tr '[:upper:]' '[:lower:]')
 DOMAIN=$(echo "$DOMAIN" | tr -d '\r\n')
 
+# Count the number of "1" characters
+count=$(echo "$INDEX" | wc -c)
+
+if [ "$count" -eq 1 ]; then
+  INDEX="0$INDEX"
+fi
+
 # Set the hostname
 MODIFIED_HOSTNAME="${SID}-${HOSTNAME}-${INDEX}"
 
