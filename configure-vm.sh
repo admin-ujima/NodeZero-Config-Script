@@ -129,7 +129,7 @@ setup_h3_runner() {
 
   echo -e "${YELLOW}[DEBUG] - Runner Names: $runner_name, Code: $code${NC}"
 
- if echo "$runner_names" | grep -q "^${MODIFIED_HOSTNAME}$"; then
+ if echo "$runner_names" | grep -q "${MODIFIED_HOSTNAME}$"; then
     echo -e "${RED}[DONE] - H3 runner with the name $MODIFIED_HOSTNAME is already set up. If you want a additional runner change the INDEX${NC}"
     exit 1
   fi
