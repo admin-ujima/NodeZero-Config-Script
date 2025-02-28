@@ -124,15 +124,12 @@ setup_h3_runner() {
   echo -e "${YELLOW}[INFO] - Starting runner checkup...${NC}"
 
   # Check if H3 runner is already set up
-  #chown nodezero:nodezero /tmp/.resolve_fragments_full_query.txt
-  #chown nodezero:nodezero /tmp/.resolve_fragments_spreads.txt
-  #chown nodezero:nodezero /tmp/.resolve_fragments_defineds.txt
-  runner_name=$(h3 runners | jq --raw-output .name 2>/dev/null)
+  runner_names=$(h3 runners | jq --raw-output .name 2>/dev/null | tr '\n' ' ')
   code=$?
 
-  echo -e "${YELLOW}[DEBUG] - Runner Name: $runner_name, Code: $code${NC}"
+  echo -e "${YELLOW}[DEBUG] - Runner Names: $runner_name, Code: $code${NC}"
 
-  if [ $code -eq 0 ] && [ "$runner_name" = "$MODIFIED_HOSTNAME" ]; then
+ if echo "$runner_names" | grep -q "^${MODIFIED_HOSTNAME}$"; then
     echo -e "${RED}[DONE] - H3 runner with the name $MODIFIED_HOSTNAME is already set up. If you want a additional runner change the INDEX${NC}"
     exit 1
   fi
@@ -217,8 +214,6 @@ DOMAIN=$(echo "$DOMAIN" | tr -d '\r\n')
 
 # Count the number of "1" characters
 count=$(echo -n "$INDEX" | wc -c)
-
-echo "Counted Characters from INDEX: $count"
 
 if [ "$count" -eq 1 ]; then
   INDEX="0$INDEX"
