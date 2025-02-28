@@ -218,6 +218,8 @@ DOMAIN=$(echo "$DOMAIN" | tr -d '\r\n')
 # Count the number of "1" characters
 count=$(echo -n "$INDEX" | wc -c)
 
+echo "Counted Characters from INDEX: $count"
+
 if [ "$count" -eq 1 ]; then
   INDEX="0$INDEX"
 fi
