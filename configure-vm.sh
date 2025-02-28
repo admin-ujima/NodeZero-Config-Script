@@ -127,7 +127,7 @@ setup_h3_runner() {
   runner_names=$(h3 runners | jq --raw-output .name 2>/dev/null)
   code=$?
 
-  print_names=$( echo $runner_names | tr '\n' ',')
+  print_names=$( echo -n $runner_names | tr '\n' ',')
   echo -e "${YELLOW}[DEBUG] - Runner Names: [$print_names], Code: $code${NC}"
 
  if echo "$runner_names" | grep -q "$MODIFIED_HOSTNAME"; then
