@@ -8,11 +8,12 @@ Für den config-based Modus legt man eine Config Datei mit den geforderten Varia
 ```env
 SID="UJ"
 DOMAIN="ujima.de"
-TOKEN="<xpliccittrust token here>"
+INDEX="<Index der Machine wenn mehrere verwendet werden>"
 NODEZERO_APIKEY="<API-Key from the Console>"
 ```
 Das laden der Datei geht über den Befehl:
 ```bash
+# Nicht mit SUDO laufen lassen (TODO: so einen Check einbauen)
 ./configure-vm.sh -f ~/config.env
 ```
 
