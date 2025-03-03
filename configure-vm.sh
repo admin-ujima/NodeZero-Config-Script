@@ -172,10 +172,10 @@ process_options() {
 }
 
 # Check for sudo privileges
-# if [ "$EUID" -ne 0 ]; then
-#   echo -e "${RED}[ERROR] - This script needs sudo privileges. Please run with sudo.${NC}"
-#   exit 1
-# fi
+if [ "$EUID" -eq 0 ]; then
+  echo -e "${RED}[ERROR] - This script should not be run with root privileges${NC}"
+  exit 1
+fi
 
 # Check if the non-interactive config file based approach want to be used
 if [ "$1" == "-f" ] || [ "$1" == "--file" ]; then
