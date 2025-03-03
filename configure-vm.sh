@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# ANSI escape codes for colors
+BLACK='\033[0;30m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+MAGENTA='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[1;37m'
+NC='\033[0m' # No Color
+
 # Check for sudo privileges
 if [ "$EUID" -eq 0 ]; then
   echo -e "${RED}[ERROR] - This script should not be run with root privileges${NC}"
@@ -20,18 +31,6 @@ strip_color_codes() {
 # Redirect stdout and stderr to Logfile
 exec > >(stdbuf -oL tee >(strip_color_codes >> "$LOG_FILE"))
 exec 2>&1
-
-
-# ANSI escape codes for colors
-BLACK='\033[0;30m'
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-MAGENTA='\033[0;35m'
-CYAN='\033[0;36m'
-WHITE='\033[1;37m'
-NC='\033[0m' # No Color
 
 # Default values
 HOSTNAME="rtpt"
