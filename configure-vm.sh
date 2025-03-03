@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Check for sudo privileges
+if [ "$EUID" -eq 0 ]; then
+  echo -e "${RED}[ERROR] - This script should not be run with root privileges${NC}"
+  exit 1
+fi
+
 # Create a directory for logs if it doesn't exist
 mkdir -p .logs
 
@@ -170,12 +176,6 @@ process_options() {
     esac
   done
 }
-
-# Check for sudo privileges
-if [ "$EUID" -eq 0 ]; then
-  echo -e "${RED}[ERROR] - This script should not be run with root privileges${NC}"
-  exit 1
-fi
 
 # Check if the non-interactive config file based approach want to be used
 if [ "$1" == "-f" ] || [ "$1" == "--file" ]; then
